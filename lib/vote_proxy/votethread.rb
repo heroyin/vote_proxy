@@ -1,13 +1,13 @@
 # encoding: UTF-8
 require "sqlite3"
-require "./libs/vote"
+require "vote_proxy/vote"
+
 
 class VoteThread
 
-
   def initialize()
     @threadGroup = ThreadGroup.new
-    @db = SQLite3::Database.new "proxy.db"
+    @db = SQLite3::Database.new "../data/proxy.db"
     @semaphore = Mutex.new
     @terminate=false;
     buildTables
@@ -20,7 +20,7 @@ class VoteThread
     @failed=0
     @terminate=false;
     # 解锁所有IP
-    @db.execute2("update proxy set lock=1")
+    @db.execute2("update proxy set lock=0")
 
     @threadGroup = ThreadGroup.new
     while @threadGroup.list.count<max

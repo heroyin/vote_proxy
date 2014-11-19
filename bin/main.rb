@@ -1,8 +1,5 @@
 # encoding: UTF-8
-require "./libs/vote"
-require "./libs/proxy"
-require "./libs/database"
-require "./libs/votethread"
+require 'vote_proxy'
 
 help = "输入查询指令：
   0 - 导入proxy.txt
