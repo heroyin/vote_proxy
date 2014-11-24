@@ -14,7 +14,7 @@ help = "输入查询指令：
 "
 
 @voteThread=VoteThread.new;
-@proxyIp = "10.8.0.3"
+@proxyIp = "10.8.1.3"
 @proxyPort = 3128
 
 def fetchCoolProxys
@@ -84,37 +84,40 @@ end
 puts help
 while true
   cmd = gets.chomp
-  case cmd.split(" ").first
-    when "0"
-      importFromFile
-      next
-    when "1"
-      @voteThread.start(150)
-      next
-    when "2"
-      @voteThread.stop
-      next
-    when "3"
-      succ,failed=@voteThread.voteResult
-      puts "投票结果: 成功-#{succ}  失败-#{failed}"
-      next
-    when "4"
-      fetchCnProxys
-      next
-    when "5"
-      fetchRuProxys
-      next
-    when "6"
-      fetchGoogleProxys
-      next
-    when "7"
-      fetchFreeProxys
-      next
-    when "8"
-      fetchCoolProxys
-      next
-    else
-      puts "未知命令"
+  begin
+    case cmd.split(" ").first
+      when "0"
+        importFromFile
+        next
+      when "1"
+        @voteThread.start(150)
+        next
+      when "2"
+        @voteThread.stop
+        next
+      when "3"
+        succ, failed=@voteThread.voteResult
+        puts "投票结果: 成功-#{succ}  失败-#{failed}"
+        next0
+      when "4"
+        fetchCnProxys
+        next
+      when "5"
+        fetchRuProxys
+        next
+      when "6"
+        fetchGoogleProxys
+        next
+      when "7"
+        fetchFreeProxys
+        next
+      when "8"
+        fetchCoolProxys
+        next
+      else
+        puts "未知命令"
+    end
+  rescue
   end
   puts help
 end

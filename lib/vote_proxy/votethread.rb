@@ -59,7 +59,7 @@ class VoteThread
                 @failed+=1
             end
           else
-            puts "没有新的IP了,睡觉10秒"
+            # puts "没有新的IP了,睡觉10秒"
             sleep(10)
           end
 
