@@ -76,7 +76,7 @@ end
 
 
 def importFromFile
-  proxys =Proxy::fileProxy("proxy.txt")
+  proxys =Proxy::fileProxy("../data/proxy.txt")
   count=@voteThread.addProxy(proxys)
   puts "proxy.txt导入代理#{proxys.size}个,成功添加#{count}个"
 end
