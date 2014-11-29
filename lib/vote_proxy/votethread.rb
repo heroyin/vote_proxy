@@ -103,6 +103,19 @@ class VoteThread
     count
   end
 
+  def availableCount
+    time = Time.now
+    time = time - 24*60*60
+    sql = "select count(*) from proxy where stamp<'#{time.strftime("%F %T")}' or stamp isnull"
+    @db.query(sql) do |rs|
+      if (row = rs.next)
+        return row[0]
+      else
+        return 0
+      end
+    end
+  end
+
   protected
 
   def buildTables

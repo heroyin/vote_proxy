@@ -91,27 +91,88 @@ class Proxy
     }
   end
 
-  def self.freeProxy(url)
+  def self.freeProxy(proxy_url)
+    url = URI.parse(proxy_url)
+    req = Net::HTTP::Get.new(url.path)
+    req.add_field('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36')
+    req.add_field('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+    req.add_field('Cookie', '__utma=104525399.653617943.1416871906.1416871906.1416914634.2; __utmb=104525399.8.10.1416914634; __utmz=104525399.1416871906.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)')
+    req.add_field('Accept-Language', 'zh-CN,zh;q=0.8')
+    req.add_field('Accept-Encoding', 'UTF-8')
+    req.add_field('Connection', 'keep-alive')
+    res = Net::HTTP.start(url.host, url.port) {|http| http.request(req) }
+    puts res.body
+
+    # response = Net::HTTP.get_response(URI.parse(url))
+    # body= response.body
+    # puts body
+    # proxys=Array.new
+    # body.scan(/<\/div> [\d.]+<\/td>[\s]+<td><span class="fport">[\d]+<\/span>/){|ip|
+    #   match=/([\d]+.[\d]+.[\d]+.[\d]+)<\/td>[\s]+<td><span class="fport">([\d]+)/.match(ip)
+    #   proxy=match[1]+":"+match[2]
+    #   proxys.push(proxy)
+    # }
+    # proxys
+  end
+
+  def self.proxynova(url)
     response = Net::HTTP.get_response(URI.parse(url))
     body= response.body
     proxys=Array.new
-    body.scan(/<\/div> [\d.]+<\/td>[\s]+<td><span class="fport">[\d]+<\/span>/){|ip|
-      match=/([\d]+.[\d]+.[\d]+.[\d]+)<\/td>[\s]+<td><span class="fport">([\d]+)/.match(ip)
+    body.scan(/"row_proxy_ip">[\d]+.[\d]+.[\d]+.[\d]+[\s]+.*[\s]+.*[\s]+.*">[\d]+/){|ip|
+      match=/([\d]+.[\d]+.[\d]+.[\d]+)[\s]+.*[\s]+.*[\s]+.*">([\d]+)/.match(ip)
       proxy=match[1]+":"+match[2]
       proxys.push(proxy)
     }
     proxys
   end
 
+  def self.xroxy(url)
+    response = Net::HTTP.get_response(URI.parse(url))
+    body= response.body
+    proxys=Array.new
+    body.scan(/<prx:ip>[\d]+.[\d]+.[\d]+.[\d]+<\/prx:ip>[\s]?<prx:port>[\d]+/){|ip|
+      match=/([\d]+.[\d]+.[\d]+.[\d]+)<\/prx:ip>[\s]?<prx:port>([\d]+)/.match(ip)
+      proxy=match[1]+":"+match[2]
+      proxys.push(proxy)
+    }
+    proxys
+  end
+
+  def self.proxz(url)
+    response = Net::HTTP.get_response(URI.parse(url))
+    body= response.body
+    proxys=Array.new
+    body.scan(/<prx:ip>[\d]+.[\d]+.[\d]+.[\d]+<\/prx:ip><prx:port>[\d]+/){|ip|
+      match=/([\d]+.[\d]+.[\d]+.[\d]+)<\/prx:ip><prx:port>([\d]+)/.match(ip)
+      proxy=match[1]+":"+match[2]
+      proxys.push(proxy)
+    }
+    proxys
+  end
 
   def self.normalProxy(url)
     response = Net::HTTP.get_response(URI.parse(url))
     body= response.body
-       proxys=Array.new
+    proxys=Array.new
+    body.scan(/[\d]+\.[\d]+\.[\d]+\.[\d]+:[\d]+/){|proxy|
+      proxys.push(proxy)
+    }
+    proxys
+  end
+
+  def self.normalProxyWithProxy(url, proxyIp, proxyPort)
+    uri = URI.parse(url)
+    proxy_class = Net::HTTP::Proxy(proxyIp, proxyPort)
+    proxy_class.start(uri.host, uri.port) {|http|
+      response = http.get(uri.path)
+      body= response.body
+      proxys=Array.new
       body.scan(/[\d]+\.[\d]+\.[\d]+\.[\d]+:[\d]+/){|proxy|
         proxys.push(proxy)
       }
       proxys
+    }
   end
 
   # 测试代理，0 - 成功  1 - 失败 2 - 超时 3 - 其他错误
@@ -138,12 +199,14 @@ class Proxy
   end
 
   def self.fileProxy(file)
-    contentsArray=[]  # start with an empty array
+    proxys=[]  # start with an empty array
     f = File.open(file)
     f.each_line {|line|
-      contentsArray.push line.delete("\n")
+      line.scan(/[\d]+\.[\d]+\.[\d]+\.[\d]+:[\d]+/){|proxy|
+        proxys.push(proxy)
+      }
     }
-    contentsArray
+    proxys
   end
 
 end
