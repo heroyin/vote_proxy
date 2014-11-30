@@ -106,30 +106,6 @@ def fetchnormalproxy
   count=@voteThread.addProxy(proxys)
   puts "#{url}抓取代理#{proxys.size}个,成功添加#{count}个"
 
-  url="http://www.proxyfire.net/forum/showthread.php?t=67597"
-  proxys =Proxy.normalProxy(url)
-  count=@voteThread.addProxy(proxys)
-  puts "#{url}抓取代理#{proxys.size}个,成功添加#{count}个"
-
-  url="http://www.proxyfire.net/forum/showthread.php?t=67597&page=2"
-  proxys =Proxy.normalProxy(url)
-  count=@voteThread.addProxy(proxys)
-  puts "#{url}抓取代理#{proxys.size}个,成功添加#{count}个"
-
-  url="http://www.proxyfire.net/forum/showthread.php?t=67597&page=3"
-  proxys =Proxy.normalProxy(url)
-  count=@voteThread.addProxy(proxys)
-  puts "#{url}抓取代理#{proxys.size}个,成功添加#{count}个"
-
-  url="http://www.proxyfire.net/forum/showthread.php?t=67597&page=4"
-  proxys =Proxy.normalProxy(url)
-  count=@voteThread.addProxy(proxys)
-  puts "#{url}抓取代理#{proxys.size}个,成功添加#{count}个"
-
-  url="http://www.proxyfire.net/forum/showthread.php?t=67597&page=5"
-  proxys =Proxy.normalProxy(url)
-  count=@voteThread.addProxy(proxys)
-  puts "#{url}抓取代理#{proxys.size}个,成功添加#{count}个"
 
 end
 
@@ -181,7 +157,8 @@ while true
       else
         puts "未知命令"
     end
-  rescue
+  rescue Exception=>e
+    puts e
   end
   puts help
 end

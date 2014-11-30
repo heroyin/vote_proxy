@@ -94,12 +94,12 @@ class Proxy
   def self.freeProxy(proxy_url)
     url = URI.parse(proxy_url)
     req = Net::HTTP::Get.new(url.path)
-    req.add_field('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36')
-    req.add_field('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
-    req.add_field('Cookie', '__utma=104525399.653617943.1416871906.1416871906.1416914634.2; __utmb=104525399.8.10.1416914634; __utmz=104525399.1416871906.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)')
-    req.add_field('Accept-Language', 'zh-CN,zh;q=0.8')
-    req.add_field('Accept-Encoding', 'UTF-8')
-    req.add_field('Connection', 'keep-alive')
+    # req.add_field('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.65 Safari/537.36')
+    # req.add_field('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+    # req.add_field('Cookie', '__utma=104525399.653617943.1416871906.1416871906.1416914634.2; __utmb=104525399.8.10.1416914634; __utmz=104525399.1416871906.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)')
+    # req.add_field('Accept-Language', 'zh-CN,zh;q=0.8')
+    # req.add_field('Accept-Encoding', 'UTF-8')
+    # req.add_field('Connection', 'keep-alive')
     res = Net::HTTP.start(url.host, url.port) {|http| http.request(req) }
     puts res.body
 

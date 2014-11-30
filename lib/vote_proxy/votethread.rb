@@ -46,7 +46,7 @@ class VoteThread
               when 3, 4
                 retryCount=proxy[3].to_i
                 retryCount+=1
-                if (retryCount>2)
+                if (retryCount>4)
                   @db.execute "delete from proxy where id=#{proxy[0]}"
                   puts "多次重试失败,删除IP地址#{proxy[1]}:#{proxy[2]}"
                   @failed+=1
